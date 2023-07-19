@@ -5,9 +5,9 @@ const roomSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  organization: {
+  department: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Organization',
+    ref: 'Department',
     required: true,
   },
 });

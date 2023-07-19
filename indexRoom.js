@@ -3,7 +3,7 @@ const app = express()
 app.use(express.json())
 const mongoose = require('mongoose');
 const Room = require("./models/Room");
-const Organization = require('./models/Organization');
+const Department = require('./models/Department')
 
 const mongoUrl = "mongodb+srv://palash:fullstack07@cluster0.z2phwnb.mongodb.net/?retryWrites=true&w=majority"
 mongoose.connect(mongoUrl,{
@@ -17,32 +17,32 @@ mongoose.connect(mongoUrl,{
 
 // POST API to create a new room
 app.post('/api/rooms', async (req, res) => {
-    const { roomNo, organizationId } = req.body;
-  
+    const { roomNo, department } = req.body;
+
     try {
-      const organization = await Organization.findById(organizationId);
-      
-      if (!organization) {
-        return res.status(404).json({ message: 'Organization not found' });
-      }
-  
-      const room = await Room.create({
-        roomNo,
-        organization: organization._id,
-      });
-  
-      res.status(201).json(room);
-    } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+    const department1 = await Department.findById(department);
+    
+    if (!department1) {
+        return res.status(404).json({ message: 'Department not found' });
     }
-  });
-  
+
+    const room = await Room.create({
+        roomNo,
+        department: department,
+    });
+
+    res.status(201).json(room);
+    } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 //Get Api
 app.get("/api/rooms/:id", async(req,res)=>{
     const { id } = req.params;
 
     try {
-        const room = await Room.findById(id).populate('organization');
+        const room = await Room.findById(id).populate('department');
 
     if (!room) {
     return res.status(404).json({ message: 'Room not found' });
@@ -63,7 +63,7 @@ app.put('/api/rooms/:id', async (req, res) => {
     try {
     const room = await Room.findByIdAndUpdate(id, roomData, {
         new: true,
-    }).populate('organization');
+    }).populate('department');
 
     if (!room) {
         return res.status(404).json({ message: 'Room not found' });

@@ -9,6 +9,11 @@ const branchSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  organization: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Organization',
+    required: true,
+  },
 });
 
 const Branch = mongoose.model('Branch', branchSchema);

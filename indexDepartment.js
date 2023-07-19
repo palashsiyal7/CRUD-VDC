@@ -33,7 +33,7 @@ app.post('/api/departments', async (req, res) => {
 
 app.get('/api/departments/:id', async(req,res)=>{
     try {
-        const departments = await Department.find().populate('branch')
+        const departments = await Department.findById(req.params.id).populate('branch')
         res.json(departments)
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' })
